@@ -84,6 +84,15 @@ async function run() {
       })
       .send({success: true});
     })
+
+    app.post('/logout', (req, res) => {
+
+      res.clearCookie('token',{
+        httpOnly:true,
+        secure: false
+      })
+      .send({success:true})
+    })
     
     
 
@@ -111,6 +120,8 @@ async function run() {
   app.get('/job-application', verifyToken,async(req, res) => {
     const email = req.query.email;
     const query = {applicant_email:email}
+
+    console.log(req.cokies?.token)
 
     if(req.user.email !== req.query.email){
       return res.status(403).send({message: 'forbidden access'})
